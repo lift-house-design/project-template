@@ -40,7 +40,7 @@ class App_Controller extends CI_Controller
     /**
      * A list of models to be autoloaded
      */
-    protected $models = array();
+    protected $models = array('user');
 
     /**
      * A formatting string for the model autoloading feature.
@@ -71,8 +71,11 @@ class App_Controller extends CI_Controller
     {
         parent::__construct();
 
-        $this->_load_models();
         $this->_load_helpers();
+		$this->load->database(config('database'));
+		$this->_load_models();
+		
+		
     }
 
     /* --------------------------------------------------------------
@@ -81,6 +84,15 @@ class App_Controller extends CI_Controller
 	
 	protected function _load_data()
 	{
+		/*
+		|--------------------------------------------------------------------------
+		| Basic Data
+		|--------------------------------------------------------------------------
+		|
+		| Formatted title, meta tags, copyright, javascript and css
+		|
+		*/
+		
 		// Set values that will be used more than once as vars
 		$site_name=config('site_name');
 		$copyright=sprintf(config('copyright_format'),$site_name,date('Y'));
@@ -95,14 +107,26 @@ class App_Controller extends CI_Controller
 		if(!empty($this->data['meta']) && is_array($this->data['meta']))
 			$meta=array_merge($meta,$this->data['meta']);
 		
-		// Set the template data
-		$this->data['site_name']=$site_name;
+		// Set the basic data
 		$this->data['meta']=$meta;
 		$this->data['css']=$this->css;
 		$this->data['js']=$this->js;
 		$this->data['title']=empty($this->title) ? $site_name : sprintf(config('title_format'),$site_name,$this->title);
 		$this->data['copyright']=$copyright;
 		$this->data['ga_code']=config('ga_code');
+		
+		/*
+		|--------------------------------------------------------------------------
+		| Global Data
+		|--------------------------------------------------------------------------
+		|
+		| Site name, page title
+		|
+		*/
+		
+		// Set the global data
+		$this->data['site_name']=$site_name;
+		$this->data['page_title']=$this->title;
 	}
 	
     /**

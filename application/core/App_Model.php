@@ -882,12 +882,14 @@ class App_Model extends CI_Model
         else
         {
             // Has the default connection been loaded yet?
-            if ( ! isset($this->db) OR ! is_object($this->db))
+			$CI=get_instance();
+			
+            if ( ! isset($CI->db) OR ! is_object($CI->db))
             {
                 $this->load->database('', FALSE, TRUE);
             }
 
-            $this->_database = $this->db;
+            $this->_database = $CI->db;
         }
     }
 
