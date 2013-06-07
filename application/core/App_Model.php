@@ -55,9 +55,9 @@ class App_Model extends CI_Model
      * The various callbacks available to the model. Each are
      * simple lists of method names (methods will be run on $this).
      */
-    protected $before_create = array();
+    protected $before_create = array('_filter_data');
     protected $after_create = array();
-    protected $before_update = array();
+    protected $before_update = array('_filter_data');
     protected $after_update = array();
     protected $before_get = array();
     protected $after_get = array();
@@ -69,7 +69,7 @@ class App_Model extends CI_Model
     /**
      * Protected, non-modifiable attributes
      */
-    protected $protected_attributes = array();
+    protected $protected_attributes = array('id');
 
     /**
      * Relationship arrays. Use flat strings for defaults or string
@@ -93,10 +93,10 @@ class App_Model extends CI_Model
     protected $skip_validation = FALSE;
 
     /**
-     * By default we return our results as objects. If we need to override
+     * By default we return our results as arrays. If we need to override
      * this, we can, or, we could use the `as_array()` and `as_object()` scopes.
      */
-    protected $return_type = 'object';
+    protected $return_type = 'array';
     protected $_temporary_return_type = NULL;
 
     /* --------------------------------------------------------------
@@ -120,6 +120,12 @@ class App_Model extends CI_Model
         array_unshift($this->before_update, 'protect_attributes');
 
         $this->_temporary_return_type = $this->return_type;
+    }
+    
+    protected function _filter_data($data)
+    {
+        $fields=$this->_database->list_fields($this->_table);
+        return array_intersect_key($data,array_flip($fields));
     }
 
     /* --------------------------------------------------------------
@@ -882,8 +888,8 @@ class App_Model extends CI_Model
         else
         {
             // Has the default connection been loaded yet?
-			$CI=get_instance();
-			
+            $CI=get_instance();
+            
             if ( ! isset($CI->db) OR ! is_object($CI->db))
             {
                 $this->load->database('', FALSE, TRUE);

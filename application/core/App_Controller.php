@@ -51,13 +51,15 @@ class App_Controller extends CI_Controller
     /**
      * A list of helpers to be autoloaded
      */
-    protected $helpers = array('url','html','project');
-	
-	protected $js=array('jquery-1.9.1.min.js');
-	
-	protected $css=array('reset.css','application.css');
-	
-	protected $title;
+    protected $helpers = array('url','html','project','form');
+    
+    protected $js=array('jquery-1.9.1.min.js');
+    
+    protected $css=array('reset.css','application.css');
+    
+    protected $title;
+    
+    protected $authenticate=FALSE;
 
     /* --------------------------------------------------------------
      * GENERIC METHODS
@@ -72,63 +74,101 @@ class App_Controller extends CI_Controller
         parent::__construct();
 
         $this->_load_helpers();
-		$this->load->database(config('database'));
-		$this->_load_models();
-		
-		
+        $this->load->database(config('database'));
+        $this->_load_models();
+        
+        
+    }
+    
+    protected function authenticate()
+    {
+        if($this->user->logged_in!==TRUE)
+        {
+            redirect('login');
+            return FALSE;
+        }
+        
+        return TRUE;
     }
 
     /* --------------------------------------------------------------
      * VIEW RENDERING
      * ------------------------------------------------------------ */
-	
-	protected function _load_data()
-	{
-		/*
-		|--------------------------------------------------------------------------
-		| Basic Data
-		|--------------------------------------------------------------------------
-		|
-		| Formatted title, meta tags, copyright, javascript and css
-		|
-		*/
-		
-		// Set values that will be used more than once as vars
-		$site_name=config('site_name');
-		$copyright=sprintf(config('copyright_format'),$site_name,date('Y'));
-		
-		// Get the default meta data
-		$meta=array(
-			'title'=>empty($this->title) ? $site_name : $this->title,
-			'description'=>config('site_description'),
-			'copyright'=>str_replace(' &copy;','',$copyright),
-		);
-		// Overwrite the meta defaults if specified values exist
-		if(!empty($this->data['meta']) && is_array($this->data['meta']))
-			$meta=array_merge($meta,$this->data['meta']);
-		
-		// Set the basic data
-		$this->data['meta']=$meta;
-		$this->data['css']=$this->css;
-		$this->data['js']=$this->js;
-		$this->data['title']=empty($this->title) ? $site_name : sprintf(config('title_format'),$site_name,$this->title);
-		$this->data['copyright']=$copyright;
-		$this->data['ga_code']=config('ga_code');
-		
-		/*
-		|--------------------------------------------------------------------------
-		| Global Data
-		|--------------------------------------------------------------------------
-		|
-		| Site name, page title
-		|
-		*/
-		
-		// Set the global data
-		$this->data['site_name']=$site_name;
-		$this->data['page_title']=$this->title;
-	}
-	
+    
+    protected function _load_data()
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | Basic Data
+        |--------------------------------------------------------------------------
+        |
+        | Formatted title, meta tags, copyright, javascript and css
+        |
+        */
+        
+        // Set values that will be used more than once as vars
+        $site_name=config('site_name');
+        $copyright=sprintf(config('copyright_format'),$site_name,date('Y'));
+        
+        // Get the default meta data
+        $meta=array(
+            'title'=>empty($this->title) ? $site_name : $this->title,
+            'description'=>config('site_description'),
+            'copyright'=>str_replace(' &copy;','',$copyright),
+        );
+        // Overwrite the meta defaults if specified values exist
+        if(!empty($this->data['meta']) && is_array($this->data['meta']))
+            $meta=array_merge($meta,$this->data['meta']);
+        
+        // Set the basic data
+        $this->data['meta']=$meta;
+        $this->data['css']=$this->css;
+        $this->data['js']=$this->js;
+        $this->data['title']=empty($this->title) ? $site_name : sprintf(config('title_format'),$site_name,$this->title);
+        $this->data['copyright']=$copyright;
+        $this->data['ga_code']=config('ga_code');
+        
+        /*
+        |--------------------------------------------------------------------------
+        | Global Data
+        |--------------------------------------------------------------------------
+        |
+        | Site name, page title
+        |
+        */
+        
+        // Set the global data
+        $this->data['site_name']=$site_name;
+        $this->data['page_title']=$this->title;
+        $this->data['slug_id_string']=implode('-',$this->uri->rsegment_array());
+        $this->data['logged_in']=$this->user->logged_in;
+        $this->data['user']=session('user');
+        $this->data['errors']=validation_errors('<li>','</li>');
+        $this->data['notifications']=$this->get_notifications();
+    }
+    
+    public function get_notifications($erase=TRUE)
+    {
+        $notifications=session('notifications');
+        
+        if($erase!==FALSE)
+            session('notifications',FALSE);
+        
+        return $notifications;
+    }
+    
+    public function set_notification($message)
+    {
+        $notifications=session('notifications');
+        
+        if(empty($notifications))
+            $notifications=array($message);
+        else
+            $notifications[]=$message;
+        
+        session('notifications',$notifications);
+    }
+    
     /**
      * Override CodeIgniter's despatch mechanism and route the request
      * through to the appropriate action. Support custom 404 methods and
@@ -161,12 +201,16 @@ class App_Controller extends CI_Controller
      */
     protected function _load_view()
     {
+        // Check for authentication
+        if($this->authenticate===TRUE && $this->user->logged_in!==TRUE)
+            redirect('login');
+        
         // If $this->view == FALSE, we don't want to load anything
         if ($this->view !== FALSE)
         {
-        	// Populate data that exists for every page
-        	$this->_load_data();
-			
+            // Populate data that exists for every page
+            $this->_load_data();
+            
             // If $this->view isn't empty, load it. If it isn't, try and guess based on the controller and action name
             $view = (!empty($this->view)) ? $this->view : $this->router->directory . $this->router->class . '/' . $this->router->method;
 
