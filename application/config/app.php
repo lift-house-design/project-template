@@ -23,8 +23,8 @@ $config['dev_mode']=TRUE;
 $config['database']=array(
 	'hostname'=>'localhost',
 	'username'=>'root',
-	'password'=>'root',
-	'database'=>'theaustinbarrelconcept',
+	'password'=>'',
+	'database'=>'test',
 	'dbdriver'=>'mysql',
 	'db_debug'=>$config['dev_mode'],
 );

@@ -29,7 +29,7 @@
 		{
 			parent::__construct();
 			
-			$user=session('user');
+			$user=$this->session->userdata('user');
 			$this->logged_in=!empty($user);
 			
 			if($this->logged_in)
@@ -39,9 +39,9 @@
 		public function log_in($email=NULL,$password=NULL)
 		{
 			if(!isset($email))
-				$email=post('email');
+				$email=$this->input->post('email');
 			if(!isset($password))
-				$password=post('password');
+				$password=$this->input->post('password');
 			
 			if(empty($email)||empty($password))
 				return FALSE;
@@ -54,14 +54,14 @@
 			if(empty($user))
 				return FALSE;
 			
-			session('user',$user);
+			$this->session->set_userdata('user',$user);
 			
 			return TRUE;
 		}
 		
 		public function log_out()
 		{
-			session('user',NULL);
+			$this->session->unset_userdata('user');
 		}
 		
 		public function change_password($current_password,$new_password)
@@ -87,6 +87,12 @@
 				
 				return TRUE;
 			}
+		}
+
+		public function authenticate($role=NULL)
+		{
+			if($this->logged_in!==TRUE)
+				return FALSE;
 		}
 	}
 	

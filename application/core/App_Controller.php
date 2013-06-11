@@ -51,7 +51,7 @@ class App_Controller extends CI_Controller
     /**
      * A list of helpers to be autoloaded
      */
-    protected $helpers = array('url','html','project','form');
+    protected $helpers = array('url','html','form','project');
     
     protected $js=array('jquery-1.9.1.min.js');
     
@@ -73,22 +73,13 @@ class App_Controller extends CI_Controller
     {
         parent::__construct();
 
+        $db_config=$this->config->item('database');
+        $this->load->database($db_config);
+
         $this->_load_helpers();
-        $this->load->database(config('database'));
         $this->_load_models();
         
         
-    }
-    
-    protected function authenticate()
-    {
-        if($this->user->logged_in!==TRUE)
-        {
-            redirect('login');
-            return FALSE;
-        }
-        
-        return TRUE;
     }
 
     /* --------------------------------------------------------------
@@ -107,13 +98,13 @@ class App_Controller extends CI_Controller
         */
         
         // Set values that will be used more than once as vars
-        $site_name=config('site_name');
-        $copyright=sprintf(config('copyright_format'),$site_name,date('Y'));
+        $site_name=$this->config->item('site_name');
+        $copyright=sprintf($this->config->item('copyright_format'),$site_name,date('Y'));
         
         // Get the default meta data
         $meta=array(
             'title'=>empty($this->title) ? $site_name : $this->title,
-            'description'=>config('site_description'),
+            'description'=>$this->config->item('site_description'),
             'copyright'=>str_replace(' &copy;','',$copyright),
         );
         // Overwrite the meta defaults if specified values exist
@@ -124,9 +115,9 @@ class App_Controller extends CI_Controller
         $this->data['meta']=$meta;
         $this->data['css']=$this->css;
         $this->data['js']=$this->js;
-        $this->data['title']=empty($this->title) ? $site_name : sprintf(config('title_format'),$site_name,$this->title);
+        $this->data['title']=empty($this->title) ? $site_name : sprintf($this->config->item('title_format'),$site_name,$this->title);
         $this->data['copyright']=$copyright;
-        $this->data['ga_code']=config('ga_code');
+        $this->data['ga_code']=$this->config->item('ga_code');
         
         /*
         |--------------------------------------------------------------------------
@@ -142,31 +133,31 @@ class App_Controller extends CI_Controller
         $this->data['page_title']=$this->title;
         $this->data['slug_id_string']=implode('-',$this->uri->rsegment_array());
         $this->data['logged_in']=$this->user->logged_in;
-        $this->data['user']=session('user');
+        $this->data['user']=$this->session->userdata('user');
         $this->data['errors']=validation_errors('<li>','</li>');
         $this->data['notifications']=$this->get_notifications();
     }
     
     public function get_notifications($erase=TRUE)
     {
-        $notifications=session('notifications');
+        $notifications=$this->session->userdata('notifications');
         
         if($erase!==FALSE)
-            session('notifications',FALSE);
+            $this->session->unset_userdata('notifications');
         
         return $notifications;
     }
     
     public function set_notification($message)
     {
-        $notifications=session('notifications');
+        $notifications=$this->session->userdata('notifications');
         
         if(empty($notifications))
             $notifications=array($message);
         else
             $notifications[]=$message;
         
-        session('notifications',$notifications);
+        $this->session->set_userdata('notifications',$notifications);
     }
     
     /**
