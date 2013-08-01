@@ -1,1 +1,0 @@
-You have been sent a contact form e-mail from {first_name} {last_name}!

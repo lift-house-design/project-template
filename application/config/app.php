@@ -23,8 +23,8 @@ $config['dev_mode']=TRUE;
 $config['database']=array(
 	'hostname'=>'localhost',
 	'username'=>'root',
-	'password'=>'',
-	'database'=>'test',
+	'password'=>'root',
+	'database'=>'project_template',
 	'dbdriver'=>'mysql',
 	'db_debug'=>$config['dev_mode'],
 );
@@ -34,47 +34,121 @@ $config['database']=array(
 | General Site Configuration
 |--------------------------------------------------------------------------
 |
-| 'site_name'			the name of the site to be used in the title bar and
-|						various other locations
+| 'site_name'			The name of the site to be used in the title bar
+|						and various other locations
 |
-| 'site_description'	a short description or tagline to be used as the
+| 'site_description'	A short description or tagline to be used as the
 |						default meta description and possibly other places
 |						on the site
 |
-| 'title_format'		the formatting of the title used on every page, where
-|						the first argument is the site name and the second is
-|						the page name
+| 'title_format'		The formatting of the title used on every page,
+|						where the first argument is the site name and the
+|						second is the page name
 |
-| 'copyright_format'	the formatting of the copyright used at the bottom
+| 'copyright_format'	The formatting of the copyright used at the bottom
 |						of every page and in the meta tag, where the first
 |						argument is the site name and the second is the 
 |						current year
-|
-| 'assets_url'			url prefix to the assets directory
-|
-| 'ga_code'				the "UA-XXXXX-X" code for google analytics, or FALSE
-|						to disable
 |
 */
 $config['site_name']='Project Template';
 $config['site_description']='Making projects work';
 $config['title_format']='%1$s | %2$s';
 $config['copyright_format']='Copyright &copy; %1$s %2$d. All Rights Reserved.';
+
+/*
+|--------------------------------------------------------------------------
+| URL/Path Configuration
+|--------------------------------------------------------------------------
+|
+| 'base_url'			Base site URL (prefix with http://)
+|
+| 'assets_url'			URL prefix to the assets directory
+|
+| 'module_path'			Base module directory path
+|
+*/
+$config['base_url']='http://project-template.com';
 $config['assets_url']='/assets';
+$config['module_path']=APPPATH.'modules';
+
+$config['administration']=array(
+	'nav'=>array(
+		'pages'=>'Pages',
+		'notifications'=>'Notifications',
+		'users'=>'Users',
+	),
+);
+
+/*
+|--------------------------------------------------------------------------
+| Google Analytics
+|--------------------------------------------------------------------------
+|
+| 'ga_code'				The "UA-XXXXX-X" code for google analytics, or FALSE
+|						to disable
+|
+*/
 $config['ga_code']=FALSE;
 
 /*
 |--------------------------------------------------------------------------
-| Contact Form Configuration
+| E-mail Notifications Configuration
 |--------------------------------------------------------------------------
+|
+| 'sender_email'		The e-mail address displayed as the sender on
+|						outgoing e-mails
+|
+| 'sender_name'			The name displayed as the sender on outgoing
+|						e-mails
+|
+| 'config'				Configuration array passed to the e-mail component
+|
+| 'templates'			Template data
+|
 */
-$config['contact_form']=array(
-	'recipient_email'=>'nickniebaum@gmail.com',
-	'recipient_name'=>'Nick Niebaum',
-	'sender_email'=>'nickniebaum@gmail.com',
-	'sender_name'=>'Nick Niebaum',
-	'subject'=>'Website Contact Form Submitted by {first_name} {last_name}',
-	'body'=>file_get_contents(dirname(__FILE__).'/templates/contact_form.php'),
+$config['email_notifications']=array(
+	'sender_email'=>'no-reply@lifthousedesign.com',
+	'sender_name'=>'Lifthouse Design',
+	'config'=>array(
+		'protocol'=>'smtp',
+		'smtp_host'=>'mail.lifthousedesign.com',
+		'smtp_user'=>'noreply@lifthousedesign.com',
+		'smtp_pass'=>'9sbZdlAklydT',
+		'smtp_port'=>'25',
+		'mailtype'=>'html',
+	),
+	'templates'=>array(
+		'email_template'=>array(
+			'subject'=>'Test E-mail Template {var_1} {var_2}',
+			'message'=>file_get_contents(dirname(__FILE__).'/templates/email/email_template.php'),
+		),
+	),
+);
+
+/*
+|--------------------------------------------------------------------------
+| SMS Notifications Configuration
+|--------------------------------------------------------------------------
+|
+| 'config'				Configuration array used by the Twilio component
+|
+| 'templates'			Template data
+|
+*/
+$config['sms_notifications']=array(
+	'config'=>array(
+		'mode'=>'prod',
+		'account_sid'=>'AC295178e1f333781132528cd16d55e49b',
+		'auth_token'=>'81905b30336cc2fb674adf13e3f17fb2',
+		'api_version'=>'2010-04-01',
+		'number'=>'+15128618405',
+	),
+	'templates'=>array(
+		'sms_template'=>array(
+			'message'=>file_get_contents(dirname(__FILE__).'/templates/sms/sms_template.php'),
+		),
+	),
 );
 
 /* End of file app.php */

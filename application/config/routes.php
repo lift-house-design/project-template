@@ -41,6 +41,9 @@
 $route['default_controller'] = "site";
 $route['404_override'] = '';
 
+$route['authentication-error']='site/authentication_error';
+
+$route['administration']='administration/administration';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

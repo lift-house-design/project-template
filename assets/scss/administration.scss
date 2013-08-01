@@ -1,0 +1,184 @@
+/*
+|--------------------------------------------------------------------------
+| Variables
+|--------------------------------------------------------------------------
+*/
+
+$color_black: #000;
+$color_white: #fff;
+$color_blue: #0072c6;
+
+$page_width: 980px;
+
+/*-----------------------------------------------------------------------*/
+
+@import 'includes/mixins.scss';
+@import 'includes/animations.scss';
+
+/*
+|--------------------------------------------------------------------------
+| Animations
+|--------------------------------------------------------------------------
+*/
+
+@import 'includes/helpers.scss';
+
+/*
+|--------------------------------------------------------------------------
+| Base
+|--------------------------------------------------------------------------
+*/
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,700);
+
+body {
+	font-family: 'Open Sans',sans-serif;
+	color: lighten($color_black,30%);
+	font-size: 13px;
+}
+
+a,
+a:visited {
+	text-decoration: none;
+	color: #333;
+}
+
+h1,
+h2 {
+	margin: 15px 0;
+}
+
+h1 {
+	font-size: 28px;
+}
+
+h2 {
+	font-size: 20px;
+	color: lighten($color_black,50%);
+}
+
+h3,
+h4,
+h5,
+h6 {
+	text-transform: uppercase;
+	margin: 10px 0;
+}
+
+h3 {
+	font-size: 14px;
+	text-transform: uppercase;
+	border-bottom: 1px solid lighten($color_black,50%);
+	color: $color_blue;
+	padding-bottom: 3px;
+}
+
+h4,
+h5,
+h6 {
+	font-size: 13px;
+}
+
+h4 {
+	color: $color_blue;
+}
+
+h6 {
+	color: lighten($color_black,50%);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Modules
+|--------------------------------------------------------------------------
+*/
+
+.navigation-button {
+	display: block;
+	text-align: center;
+	background-color: lighten($color_black,40%); /*$color_blue;*/
+	color: $color_white;
+	padding: 10px 20px;
+	font-weight: bold;
+	font-size: 14px;
+	margin-bottom: 15px;
+	@include border-radius(10px);
+
+	&:hover {
+		background-color: $color_blue;
+	}
+}
+
+/*
+|--------------------------------------------------------------------------
+| Layout
+|--------------------------------------------------------------------------
+*/
+
+header {
+	position: fixed;
+	background-color: lighten($color_black,25%);
+	left: 0;
+	right: 0;
+	top: 0;
+	line-height: 40px;
+
+	#logo {
+		font-size: 20px;
+		color: #fff;
+		padding: 0 15px;
+		font-weight: 300;
+		line-height: 40px;
+		float: left;
+	}
+
+	nav {
+		float: left;
+		line-height: 40px;
+		margin-left: 20px;
+
+		a {
+			color: darken($color_white,5%);
+			float: left;
+			font-size: 11px;
+			text-transform: uppercase;
+			padding: 0 10px;
+			border-right: 1px solid lighten($color_black,40%);
+
+			&:last-child {
+				border-right: 0;
+			}
+
+			&:hover,
+			&.selected {
+				background-color: lighten($color_black,30%);
+			}
+		}
+	}
+
+	#account {
+		float: right;
+		color: darken($color_white,5%);
+		font-size: 12px;
+		margin-right: 15px;
+
+		a {
+			color: lighten($color_blue,30%);
+			font-weight: bold;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+}
+
+#content {
+	margin-top: 60px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Pages
+|--------------------------------------------------------------------------
+*/

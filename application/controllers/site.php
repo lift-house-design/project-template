@@ -6,6 +6,8 @@ class Site extends App_Controller
 	{
 		
 	}
+
+	public function authentication_error(){}
 }
 
 /* End of file site.php */

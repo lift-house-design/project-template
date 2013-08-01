@@ -51,7 +51,7 @@ class App_Controller extends CI_Controller
     /**
      * A list of helpers to be autoloaded
      */
-    protected $helpers = array('url','html','form','project');
+    protected $helpers = array();
     
     protected $js=array('jquery-1.9.1.min.js');
     
@@ -78,8 +78,36 @@ class App_Controller extends CI_Controller
 
         $this->_load_helpers();
         $this->_load_models();
-        
-        
+
+        if($this->authenticate()===FALSE)
+        {
+            redirect('authentication-error');
+        }
+    }
+
+    /**
+     * Ensure the user has access to this page
+     */
+    protected function authenticate()
+    {
+        if($this->authenticate===FALSE)
+        {
+            return TRUE;
+        }
+        elseif(is_array($this->authenticate))
+        {
+            foreach($this->authenticate as $allowed_role)
+            {
+                if($this->user->has_role($allowed_role)===TRUE)
+                {
+                    return TRUE;
+                }
+            }
+        }
+
+        // Do not authenticate if they do not have a valid role or
+        // a role is not correctly set
+        return FALSE;
     }
 
     /* --------------------------------------------------------------

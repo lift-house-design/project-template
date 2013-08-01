@@ -91,5 +91,71 @@ if(!function_exists('states_array'))
 	}
 }
 
+if(!function_exists('send_email'))
+{
+	function send_email($template,$data,$to)
+	{
+		static $email;
+
+		$CI=get_instance();
+		$config=$CI->config->item('email_notifications');
+
+		if(isset($email))
+		{
+			$email->clear();
+		}
+		else
+		{
+			$CI->load->library('email');
+
+			// Set a reference to the email library; this will also tell
+			// this function to skip initialization on the next call
+			$email=$CI->email;
+
+			if(empty($config['templates'][$template]))
+				return FALSE;
+			if(!empty($config['config']))
+				$email->initialize($config['config']);
+		}
+
+		$subject=$config['templates'][$template]['subject'];
+		$message=$config['templates'][$template]['message'];
+
+		foreach($data as $k=>$v)
+		{
+			$subject=str_replace('{'.$k.'}',$v,$subject);
+			$message=str_replace('{'.$k.'}',$v,$message);
+		}
+
+		$email->from($config['sender_email'],$config['sender_name']);
+		$email->to($to);
+		$email->subject($subject);
+		$email->message($message);
+
+		return $email->send();
+	}
+}
+
+if(!function_exists('send_sms'))
+{
+	function send_sms($template,$data,$to)
+	{
+		$CI=get_instance();
+		$config=$CI->config->item('sms_notifications');
+		$CI->load->library('twilio');
+
+		$message=$config['templates'][$template]['message'];
+
+		foreach($data as $k=>$v)
+		{
+			$message=str_replace('{'.$k.'}',$v,$message);
+		}
+
+		$response=$CI->twilio->sms($config['config']['number'],$to,$message);
+
+		return $response->IsError===FALSE;
+	}
+}
+
 /* End of file project_helper.php */
 /* Location: ./application/helpers/project_helper.php */
