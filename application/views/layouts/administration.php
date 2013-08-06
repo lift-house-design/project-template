@@ -16,15 +16,31 @@
 	<header>
 		<?php echo anchor('administration','Administration',array('id'=>'logo')) ?>
 		<nav>
-			<?php foreach($nav as $uri=>$title): ?>
-				<?php echo anchor($uri,$title,$uri=='pages' ? 'class="selected"' : '') ?>
-			<?php endforeach; ?>
+			<?php if($logged_in): ?>
+				<?php foreach($nav as $uri=>$title): ?>
+					<?php echo anchor('administration/'.$uri,$title,$uri==$this->uri->rsegment(3) ? 'class="selected"' : '') ?>
+				<?php endforeach; ?>
+			<?php endif; ?>
 		</nav>
-		<div id="account">
-			Welcome back, <?php echo anchor('profile','Nick Niebaum') ?>
-		</div>
+		<?php if($logged_in): ?>
+			<div id="account">
+				Welcome back, <strong><?php echo trim($user['first_name'].' '.$user['last_name']) ?></strong> | <?php echo anchor('administration/log_out','Log Out') ?>
+			</div>
+		<?php endif; ?>
 	</header>
 	<div id="content" class="wrapper">
+		<?php if(!empty($notifications)): ?>
+			<div class="notifications">
+				<ul>
+					<li><?php echo implode('</li><li>',$notifications) ?></li>
+				</ul>
+			</div>
+		<?php endif; ?>
+		<?php if(!empty($errors)): ?>
+			<div class="errors">
+				<ul><?php echo $errors ?></ul>
+			</div>
+		<?php endif; ?>
 		<?php echo $yield ?>
 	</div>
 	<?php echo js($js) ?>

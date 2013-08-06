@@ -58,7 +58,11 @@ class Modules
 		if(!empty($this->_module_instances))
 		{
 			if(!empty($this->_module_instances[$type][$name]))
-				return $this->_module_instances[$type][$name];
+			{
+				$module=$this->_module_instances[$type][$name];
+				$module->set_package_path();
+				return $module;
+			}
 		}
 
 		if($this->module_exists($name,$type)===FALSE)
@@ -71,6 +75,7 @@ class Modules
 
 		$CI=get_instance();
 		$module=new $module_class($CI);
+		$module->set_package_path();
 		$this->_module_instances[$type][$name]=$module;
 
 		return $module;
@@ -97,14 +102,56 @@ class Module
 		$this->type=array_pop($classname_parts);
 		$this->key=implode('_',$classname_parts);
 	}
+
+	public function set_package_path()
+	{
+		// Set this directory to the package paths in order to load components from it
+		$module_path=$this->_ci->config->item('module_path');
+		$this->_ci->load->set_package_path($module_path.'/'.$this->type.'/'.$this->key);
+	}
 }
 
 class Admin_module extends Module
 {
-	public $name;
+	public $name='Unknown Admin Module';
 
-	public function init($controller)
+	public $data=array();
+
+	public $js=array();
+
+	public $css=array();
+
+	public function __construct($CI)
 	{
-		$controller->nav[$this->key]=$this->name;
+		parent::__construct($CI);
+
+		$this->_ci->nav[$this->key]=$this->name;
+	}
+
+	/*
+	|--------------------------------------------------------------------------
+	| Magic Methods
+	|--------------------------------------------------------------------------
+	|
+	| We want this module to behave as a controller, so any calls to $this
+	| should be re-routed back to the administration controller. The exception
+	| to this is array properties; they throw the "indirect modification of
+	| an overloaded property error", so $this->data is handled in a different
+	| way.
+	|
+	*/
+	public function __get($name)
+	{
+		return $this->_ci->_module_get($name);
+	}
+
+	public function __set($name,$value)
+	{
+		$this->_ci->_module_set($name,$value);
+	}
+
+	public function __call($method,$args)
+	{
+		$this->_ci->_module_call($method,$args);
 	}
 }

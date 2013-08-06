@@ -72,14 +72,6 @@ $config['base_url']='http://project-template.com';
 $config['assets_url']='/assets';
 $config['module_path']=APPPATH.'modules';
 
-$config['administration']=array(
-	'nav'=>array(
-		'pages'=>'Pages',
-		'notifications'=>'Notifications',
-		'users'=>'Users',
-	),
-);
-
 /*
 |--------------------------------------------------------------------------
 | Google Analytics

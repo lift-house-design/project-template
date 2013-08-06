@@ -2,7 +2,7 @@
 	
 	class User_model extends App_Model
 	{
-		public $_table='users';
+		public $_table='user';
 
 		protected $protected_attributes=array('id');
 		
@@ -11,6 +11,8 @@
 		public $belongs_to=array();
 		
 		public $after_get=array('after_get');
+
+		public $before_delete=array('before_delete');
 
 	/*-----------------------------------------------------------------------*/
 
@@ -31,12 +33,27 @@
 
 		protected function after_get($data)
 		{
-			$query=$this->_database->get_where('role',array(
-				'user_id'=>$data['id'],
-			));
-			$data['roles']=$query->result_array();
+			if(!empty($data))
+			{
+				$query=$this->_database->get_where('role',array(
+					'user_id'=>$data['id'],
+				));
+
+				$data['roles']=array();
+				foreach($query->result_array() as $row)
+				{
+					$data['roles'][]=$row['role'];
+				}
+			}
 
 			return $data;
+		}
+
+		public function before_delete($id)
+		{
+			$this->_database->delete('role',array(
+				'user_id'=>$id,
+			));
 		}
 		
 		public function log_in()
@@ -54,6 +71,7 @@
 				),
 			);
 
+			$this->load->library('form_validation');
 			$this->form_validation->set_rules($rules);
 
 			if($this->form_validation->run()!==FALSE)
@@ -101,6 +119,44 @@
 			}
 
 			return FALSE;
+		}
+
+		/*public function has_role($id,$role)
+		{
+			$query=$this->_database->get_where('role',array(
+				'user_id'=>$id,
+				'role'=>$role,
+			));
+
+			if($query->row_array())
+				return TRUE;
+			else
+				return FALSE;
+		}*/
+
+		public function save_roles($id,$roles)
+		{
+			$this->_database->trans_start();
+			$this->_database->delete('role',array(
+				'user_id'=>$id,
+			));
+
+			foreach($roles as $role)
+			{
+				$this->_database->insert('role',array(
+					'user_id'=>$id,
+					'role'=>$role,
+				));
+			}
+			$this->_database->trans_complete();
+			return $this->_database->trans_status();
+		}
+
+		public function get_all_roles()
+		{
+			return array(
+				'administrator'=>'User may log in to the back-end of the website and make changes to the front-end.',
+			);
 		}
 	}
 	

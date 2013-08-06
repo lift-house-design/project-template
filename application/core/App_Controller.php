@@ -61,6 +61,8 @@ class App_Controller extends CI_Controller
     
     protected $authenticate=FALSE;
 
+    protected $authentication_redirect='authentication-error';
+
     /* --------------------------------------------------------------
      * GENERIC METHODS
      * ------------------------------------------------------------ */
@@ -78,11 +80,6 @@ class App_Controller extends CI_Controller
 
         $this->_load_helpers();
         $this->_load_models();
-
-        if($this->authenticate()===FALSE)
-        {
-            redirect('authentication-error');
-        }
     }
 
     /**
@@ -198,6 +195,11 @@ class App_Controller extends CI_Controller
         if (method_exists($this, $method))
         {
             call_user_func_array(array($this, $method), array_slice($this->uri->rsegments, 2));
+
+            if($this->authenticate()===FALSE)
+            {
+                redirect($this->authentication_redirect);
+            }
         }
         else
         {

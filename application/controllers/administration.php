@@ -6,12 +6,16 @@ class Administration extends App_Controller
 
 	protected $layout='layouts/administration';
 
+	protected $authenticate=array('administrator');
+
+	protected $authentication_redirect='administration/log_in';
+
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->css=array('reset.css','administration.css');
-		$this->js[]='administration.js';
+		//$this->js[]='pages/administration.js';
 
 		$this->_load_modules();
 
@@ -28,15 +32,38 @@ class Administration extends App_Controller
 		foreach($this->modules->get_modules('admin') as $admin_module)
 		{
 			$module=$this->modules->get_instance($admin_module,'admin');
-			$module->init($this);
 		}
 	}
 
-	public function index()
+	/**
+	 * Allows the module to access protected and private members of the controller
+	 */
+	public function _module_get($name)
 	{
-		
+		return $this->$name;
 	}
 
+	/**
+	 * Allows the module to set protected and private members of the controller
+	 */
+	public function _module_set($name,$value)
+	{
+		$this->$name=$value;
+	}
+
+	/**
+	 * Allows the module to call protected and private methods of the controller
+	 */
+	public function _module_call($method,$args)
+	{
+		call_user_func_array(array($this,$method),$args);
+	}
+
+	public function index(){}
+
+	/**
+	 * Loads the specified module and executes it
+	 */
 	public function module()
 	{
 		$this->view=FALSE;
@@ -59,9 +86,36 @@ class Administration extends App_Controller
 
 			$this->load->library('modules');
 			$module=$this->modules->get_instance($module_name,'admin');
+			$this->view=$method;
 
-			call_user_func_array(array($module,$method),$module_args);
+			@call_user_func_array(array($module,$method),$module_args);
+
+			$this->data=array_merge_recursive($this->data,$module->data);
+			$this->js=array_merge_recursive($this->js,$module->js);
+			$this->css=array_merge_recursive($this->css,$module->css);
 		}
+	}
+
+	public function log_in()
+	{
+		$this->authenticate=FALSE;
+
+		if($this->input->post())
+		{
+			if($this->user->log_in())
+			{
+				redirect('administration');
+			}
+		}
+	}
+
+	public function log_out()
+	{
+		$this->authenticate=FALSE;
+		
+		$this->user->log_out();
+
+		redirect('administration/log_in');
 	}
 }
 
