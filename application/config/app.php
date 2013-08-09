@@ -96,8 +96,6 @@ $config['ga_code']=FALSE;
 |
 | 'config'				Configuration array passed to the e-mail component
 |
-| 'templates'			Template data
-|
 */
 $config['email_notifications']=array(
 	'sender_email'=>'no-reply@lifthousedesign.com',
@@ -110,12 +108,6 @@ $config['email_notifications']=array(
 		'smtp_port'=>'25',
 		'mailtype'=>'html',
 	),
-	'templates'=>array(
-		'email_template'=>array(
-			'subject'=>'Test E-mail Template {var_1} {var_2}',
-			'message'=>file_get_contents(dirname(__FILE__).'/templates/email/email_template.php'),
-		),
-	),
 );
 
 /*
@@ -125,8 +117,6 @@ $config['email_notifications']=array(
 |
 | 'config'				Configuration array used by the Twilio component
 |
-| 'templates'			Template data
-|
 */
 $config['sms_notifications']=array(
 	'config'=>array(
@@ -135,11 +125,6 @@ $config['sms_notifications']=array(
 		'auth_token'=>'81905b30336cc2fb674adf13e3f17fb2',
 		'api_version'=>'2010-04-01',
 		'number'=>'+15128618405',
-	),
-	'templates'=>array(
-		'sms_template'=>array(
-			'message'=>file_get_contents(dirname(__FILE__).'/templates/sms/sms_template.php'),
-		),
 	),
 );
 

@@ -14,6 +14,8 @@ CREATE  TABLE IF NOT EXISTS `user` (
   `password` VARCHAR(64) NOT NULL ,
   `first_name` VARCHAR(32) NULL ,
   `last_name` VARCHAR(32) NULL ,
+  `phone` VARCHAR(14) NULL ,
+  `phone_text_capable` TINYINT NULL DEFAULT 0 ,
   `created_at` DATETIME NOT NULL ,
   `updated_at` DATETIME NULL ,
   `last_login` DATETIME NULL ,
@@ -69,7 +71,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- Data for table `user`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `user` (`id`, `email`, `password`, `first_name`, `last_name`, `created_at`, `updated_at`, `last_login`) VALUES (1, 'nick@lifthousedesign.com', '4f1f8def85fc3bf2dc58f04a667c8273b37a8b4c', 'Nick', 'Niebaum', '2013-08-01 16:35:34', NULL, NULL);
+INSERT INTO `user` (`id`, `email`, `password`, `first_name`, `last_name`, `phone`, `phone_text_capable`, `created_at`, `updated_at`, `last_login`) VALUES (1, 'nick@lifthousedesign.com', '4f1f8def85fc3bf2dc58f04a667c8273b37a8b4c', 'Nick', 'Niebaum', '(304) 871-6066', 1, '2013-08-01 16:35:34', NULL, NULL);
 
 COMMIT;
 

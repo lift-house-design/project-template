@@ -69,6 +69,9 @@ class Users_admin_module extends Admin_module
 				redirect('administration/users');
 			}
 		}
+
+		$this->js[]='jquery.maskedinput.min.js';
+		$this->js[]='pages/administration-users-save.js';
 	}
 
 	public function edit($id)
@@ -105,6 +108,8 @@ class Users_admin_module extends Admin_module
 			if(empty($data['password']))
 				unset($data['password']);
 
+			$data['phone_text_capable']=isset($data['phone_text_capable']) ? 1 : 0;
+
 			if($this->user->update($data['id'],$data))
 			{
 				if(empty($data['roles']))
@@ -117,6 +122,9 @@ class Users_admin_module extends Admin_module
 				redirect('administration/users');
 			}
 		}
+
+		$this->js[]='jquery.maskedinput.min.js';
+		$this->js[]='pages/administration-users-save.js';
 
 		$this->data['data']=$this->user->get($id);
 	}

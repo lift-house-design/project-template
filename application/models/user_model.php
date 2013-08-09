@@ -12,6 +12,10 @@
 		
 		public $after_get=array('after_get');
 
+		public $before_create=array('_filter_data','created_at');
+
+		public $before_update=array('_filter_data','updated_at');
+
 		public $before_delete=array('before_delete');
 
 	/*-----------------------------------------------------------------------*/

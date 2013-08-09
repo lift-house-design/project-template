@@ -93,7 +93,7 @@ if(!function_exists('states_array'))
 
 if(!function_exists('send_email'))
 {
-	function send_email($template,$data,$to)
+	function send_email($subject,$message,$data,$to)
 	{
 		static $email;
 
@@ -112,14 +112,9 @@ if(!function_exists('send_email'))
 			// this function to skip initialization on the next call
 			$email=$CI->email;
 
-			if(empty($config['templates'][$template]))
-				return FALSE;
 			if(!empty($config['config']))
 				$email->initialize($config['config']);
 		}
-
-		$subject=$config['templates'][$template]['subject'];
-		$message=$config['templates'][$template]['message'];
 
 		foreach($data as $k=>$v)
 		{
@@ -138,13 +133,11 @@ if(!function_exists('send_email'))
 
 if(!function_exists('send_sms'))
 {
-	function send_sms($template,$data,$to)
+	function send_sms($message,$data,$to)
 	{
 		$CI=get_instance();
 		$config=$CI->config->item('sms_notifications');
 		$CI->load->library('twilio');
-
-		$message=$config['templates'][$template]['message'];
 
 		foreach($data as $k=>$v)
 		{

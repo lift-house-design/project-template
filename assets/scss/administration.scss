@@ -240,12 +240,16 @@ dl {
 			display: inline-block;
 			width: 100px;
 			font-size: 12px;
+			vertical-align: top;
+			padding-top: 5px;
 		}
 
 		&.checkbox,
 		&.radio {
 			label {
 				width: auto;
+				padding-top: 0;
+				vertical-align: baseline;
 			}
 		}
 	}

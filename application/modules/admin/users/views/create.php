@@ -28,6 +28,25 @@
 		'value'=>set_value('last_name'),
 	)) ?>
 </div>
+<div class="field">
+	<?php echo form_label('Phone','phone') ?>
+	<div class="element">
+		<?php echo form_input(array(
+			'name'=>'phone',
+			'id'=>'phone',
+			'value'=>set_value('phone'),
+			'class'=>'phone',
+		)) ?>
+		<div class="checkbox field">
+		<?php echo form_checkbox(array(
+			'name'=>'phone_text_capable',
+			'id'=>'phone_text_capable',
+			'checked'=>TRUE,
+		)) ?>
+		<?php echo form_label('Is this phone text capable?','phone_text_capable') ?>
+		</div>
+	</div>
+</div>
 <h3>Password</h3>
 <div class="required field">
 	<?php echo form_label('Password','password') ?>

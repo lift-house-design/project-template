@@ -10,7 +10,9 @@
 		
 		public $belongs_to=array();
 		
-		public $after_get=array('after_get');
+		public $after_get=array('_filter_data','after_get');
+
+		public $before_update=array('_filter_data','updated_at');
 
 		public $before_delete=array();
 
@@ -31,11 +33,23 @@
 
 			if(!empty($notification))
 			{
-				if($notification['email_enabled'])
+				$email_successful=TRUE;
+				$sms_successful=TRUE;
+
+				if($notification['email_enabled'] && $email)
 				{
-					
+					$email_successful=send_email($notification['email_subject'],$notification['email_message'],$data,$email);
 				}
+
+				if($notification['sms_enabled'] && $phone)
+				{
+					$sms_successful=send_sms($notification['sms_message'],$data,$phone);
+				}
+
+				return $email_successful && $sms_successful;
 			}
+
+			return FALSE;
 		}
 	}
 	

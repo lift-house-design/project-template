@@ -13,9 +13,12 @@ class Site extends App_Controller
 	{
 		$this->load->model('notification_model','notification');
 		$data=array(
-
+			'var_1'=>'Value 1',
+			'var_2'=>'Value 2',
 		);
 		$this->notification->send('test_notification',$data,'nick@mvbeattie.com','3048716066');
+
+		$this->view=FALSE;
 	}
 }
 

@@ -304,9 +304,13 @@ dl {
     .field.aligned label, .aligned .field label {
       display: inline-block;
       width: 100px;
-      font-size: 12px; }
+      font-size: 12px;
+      vertical-align: top;
+      padding-top: 5px; }
     .field.aligned.checkbox label, .aligned .checkbox.field label, .field.aligned.radio label, .aligned .radio.field label {
-      width: auto; }
+      width: auto;
+      padding-top: 0;
+      vertical-align: baseline; }
   .field.stacked label, .stacked .field label {
     display: block;
     margin-bottom: 5px;
