@@ -7,6 +7,24 @@ class Site extends App_Controller
 		
 	}
 
+	public function page()
+	{
+		$slug=str_replace('-','_',$this->uri->uri_string());
+
+		if(file_exists(APPPATH.'views/pages/'.$slug.'.php'))
+		{
+			$this->view='pages/'.$slug;
+			$this->layout=FALSE;
+		}
+		elseif(file_exists(APPPATH.'views/'.$slug.'.php'))
+		{
+			$this->view=$slug;
+			$this->layout=FALSE;
+		}
+		else
+			$this->view='site/not_found';
+	}
+
 	public function authentication_error(){}
 
 	public function send_test_notification()

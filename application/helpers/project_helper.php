@@ -112,8 +112,10 @@ if(!function_exists('send_email'))
 			// this function to skip initialization on the next call
 			$email=$CI->email;
 
+			// $this->load->library('email',$config) vs. $this->email->initialize($config)
+			// $this->email->initialize() will not authenticate you if your SMTP server requires it
 			if(!empty($config['config']))
-				$email->initialize($config['config']);
+				$CI->load->library('email',$config['config']);
 		}
 
 		foreach($data as $k=>$v)
