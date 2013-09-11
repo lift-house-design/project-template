@@ -125,19 +125,6 @@
 			return FALSE;
 		}
 
-		/*public function has_role($id,$role)
-		{
-			$query=$this->_database->get_where('role',array(
-				'user_id'=>$id,
-				'role'=>$role,
-			));
-
-			if($query->row_array())
-				return TRUE;
-			else
-				return FALSE;
-		}*/
-
 		public function save_roles($id,$roles)
 		{
 			$this->_database->trans_start();
@@ -161,6 +148,11 @@
 			return array(
 				'administrator'=>'User may log in to the back-end of the website and make changes to the front-end.',
 			);
+		}
+
+		public function generate_confirm_code()
+		{
+			return base64_encode(crypt(time(),'$2a$10$'.sha1('sekritz')));
 		}
 	}
 	

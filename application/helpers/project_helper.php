@@ -93,7 +93,7 @@ if(!function_exists('states_array'))
 
 if(!function_exists('send_email'))
 {
-	function send_email($subject,$message,$data,$to)
+	function send_email($subject,$message,$to,$data=array())
 	{
 		static $email;
 
@@ -128,6 +128,8 @@ if(!function_exists('send_email'))
 		$email->to($to);
 		$email->subject($subject);
 		$email->message($message);
+		$email->set_mailtype("html");
+//			var_dump($config['config']);var_dump($message);die;
 
 		return $email->send();
 	}
@@ -135,7 +137,7 @@ if(!function_exists('send_email'))
 
 if(!function_exists('send_sms'))
 {
-	function send_sms($message,$data,$to)
+	function send_sms($message,$to,$data=array())
 	{
 		$CI=get_instance();
 		$config=$CI->config->item('sms_notifications');

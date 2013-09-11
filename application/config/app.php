@@ -1,15 +1,8 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-/*
-|--------------------------------------------------------------------------
-| Development Mode
-|--------------------------------------------------------------------------
-|
-| Set to true to display errors and debugging information.
-|
-|--------------------------------------------------------------------------
-*/
-$config['dev_mode']=TRUE;
+$config['environment'] = 'local';
+
+$config['error_email'] = 'bain.lifthousedesign@gmail.com';
 
 /*
 |--------------------------------------------------------------------------
@@ -20,66 +13,70 @@ $config['dev_mode']=TRUE;
 |
 |--------------------------------------------------------------------------
 */
-$config['database']=array(
-	'hostname'=>'localhost',
-	'username'=>'root',
-	'password'=>'root',
-	'database'=>'project_template',
-	'dbdriver'=>'mysql',
-	'db_debug'=>$config['dev_mode'],
+$config['databases']=array(
+	'default' => array(
+		'hostname' => 'localhost',
+		'dbdriver' => 'mysql',
+		'db_debug' => true,		
+	),
+	'local'=>array(
+		'username'=>'root',
+		'password'=>'root',
+		'database'=>'project_template',
+	),
+	'development'=>array(
+		'username'=>'',
+		'password'=>'',
+		'database'=>'',
+	),
+	'production'=>array(
+		'username'=>'',
+		'password'=>'',
+		'database'=>'',
+		'db_debug' => false,
+	),
+);
+
+// Overwrite default database settings with environment-specific settings
+$config['database'] = array_merge(
+	$config['databases']['default'],
+	$config['databases'][$config['environment']]
 );
 
 /*
 |--------------------------------------------------------------------------
-| General Site Configuration
+| Metadata
 |--------------------------------------------------------------------------
-|
-| 'site_name'			The name of the site to be used in the title bar
-|						and various other locations
-|
-| 'site_description'	A short description or tagline to be used as the
-|						default meta description and possibly other places
-|						on the site
-|
-| 'title_format'		The formatting of the title used on every page,
-|						where the first argument is the site name and the
-|						second is the page name
-|
-| 'copyright_format'	The formatting of the copyright used at the bottom
-|						of every page and in the meta tag, where the first
-|						argument is the site name and the second is the 
-|						current year
-|
+| 'site_name'			The company or website name (Used in copyright)
+| 'meta'				Default values for <meta> and <title> tags 
+| 'copyright'			Used in footer, does not usually need to be changed
+| 'seo_content'			Content that search engines see, but humans do not
 */
-$config['site_name']='Project Template';
-$config['site_description']='Making projects work';
-$config['title_format']='%1$s | %2$s';
-$config['copyright_format']='Copyright &copy; %1$s %2$d. All Rights Reserved.';
+$config['site_name'] = 'Lift House Design';
+$config['meta'] = array(
+	'title' => "Project Template",
+	'description' => "Project Template for LAMP Developers"
+);
+$config['copyright']='Copyright &copy; '.$config['site_name'].' '.date('Y').' All Rights Reserved.';
+$config['seo_content'] = '<a href="http://twitterape.com>Trend Archive</a>"';
 
 /*
 |--------------------------------------------------------------------------
-| URL/Path Configuration
+| URL / Path Configuration
 |--------------------------------------------------------------------------
-|
 | 'base_url'			Base site URL (prefix with http://)
-|
 | 'assets_url'			URL prefix to the assets directory
-|
 | 'module_path'			Base module directory path
-|
 */
-$config['base_url']='http://project-template.com';
 $config['assets_url']='/assets';
 $config['module_path']=APPPATH.'modules';
 
 /*
 |--------------------------------------------------------------------------
-| Google Analytics
+| Monitoring / Analytics
 |--------------------------------------------------------------------------
-|
 | 'ga_code'				The "UA-XXXXX-X" code for google analytics, or FALSE
 |						to disable
-|
 */
 $config['ga_code']=FALSE;
 
@@ -87,15 +84,11 @@ $config['ga_code']=FALSE;
 |--------------------------------------------------------------------------
 | E-mail Notifications Configuration
 |--------------------------------------------------------------------------
-|
 | 'sender_email'		The e-mail address displayed as the sender on
 |						outgoing e-mails
-|
 | 'sender_name'			The name displayed as the sender on outgoing
 |						e-mails
-|
 | 'config'				Configuration array passed to the e-mail component
-|
 */
 $config['email_notifications']=array(
 	'sender_email'=>'no-reply@lifthousedesign.com',
@@ -114,9 +107,7 @@ $config['email_notifications']=array(
 |--------------------------------------------------------------------------
 | SMS Notifications Configuration
 |--------------------------------------------------------------------------
-|
 | 'config'				Configuration array used by the Twilio component
-|
 */
 $config['sms_notifications']=array(
 	'config'=>array(
@@ -124,9 +115,6 @@ $config['sms_notifications']=array(
 		'account_sid'=>'AC295178e1f333781132528cd16d55e49b',
 		'auth_token'=>'81905b30336cc2fb674adf13e3f17fb2',
 		'api_version'=>'2010-04-01',
-		'number'=>'+15128618405',
+		'number'=>'+15129422374',
 	),
 );
-
-/* End of file app.php */
-/* Location: ./application/config/app.php */

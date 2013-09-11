@@ -2,9 +2,17 @@
 
 class Site extends App_Controller
 {
+	public function __construct()
+	{
+		parent::__construct();
+		$this->asides['topbar'] = 'topbar';
+		$this->asides['notifications'] = 'notifications';
+		$this->css[] = 'application.css';
+	}		
+
 	public function index()
 	{
-		
+
 	}
 
 	public function page()
@@ -23,20 +31,6 @@ class Site extends App_Controller
 		}
 		else
 			$this->view='site/not_found';
-	}
-
-	public function authentication_error(){}
-
-	public function send_test_notification()
-	{
-		$this->load->model('notification_model','notification');
-		$data=array(
-			'var_1'=>'Value 1',
-			'var_2'=>'Value 2',
-		);
-		$this->notification->send('test_notification',$data,'nick@mvbeattie.com','3048716066');
-
-		$this->view=FALSE;
 	}
 }
 

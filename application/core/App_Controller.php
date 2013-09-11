@@ -113,49 +113,14 @@ class App_Controller extends CI_Controller
     
     protected function _load_data()
     {
-        /*
-        |--------------------------------------------------------------------------
-        | Basic Data
-        |--------------------------------------------------------------------------
-        |
-        | Formatted title, meta tags, copyright, javascript and css
-        |
-        */
-        
-        // Set values that will be used more than once as vars
-        $site_name=$this->config->item('site_name');
-        $copyright=sprintf($this->config->item('copyright_format'),$site_name,date('Y'));
-        
-        // Get the default meta data
-        $meta=array(
-            'title'=>empty($this->title) ? $site_name : $this->title,
-            'description'=>$this->config->item('site_description'),
-            'copyright'=>str_replace(' &copy;','',$copyright),
-        );
-        // Overwrite the meta defaults if specified values exist
-        if(!empty($this->data['meta']) && is_array($this->data['meta']))
-            $meta=array_merge($meta,$this->data['meta']);
-        
         // Set the basic data
-        $this->data['meta']=$meta;
-        $this->data['css']=$this->css;
-        $this->data['js']=$this->js;
-        $this->data['title']=empty($this->title) ? $site_name : sprintf($this->config->item('title_format'),$site_name,$this->title);
-        $this->data['copyright']=$copyright;
-        $this->data['ga_code']=$this->config->item('ga_code');
-        
-        /*
-        |--------------------------------------------------------------------------
-        | Global Data
-        |--------------------------------------------------------------------------
-        |
-        | Site name, page title
-        |
-        */
+        $this->data['css'] = $this->css;
+        $this->data['js'] = $this->js;
+        $this->data['meta'] = $this->config->item('meta');
+        $this->data['copyright'] = $this->config->item('copyright');
+        $this->data['ga_code'] = $this->config->item('ga_code');
         
         // Set the global data
-        $this->data['site_name']=$site_name;
-        $this->data['page_title']=$this->title;
         $this->data['slug_id_string']=implode('-',$this->uri->rsegment_array());
         $this->data['logged_in']=$this->user->logged_in;
         $this->data['user']=$this->session->userdata('user');
@@ -243,7 +208,7 @@ class App_Controller extends CI_Controller
             {
                 foreach ($this->asides as $name => $file)
                 {
-                    $data['yield_'.$name] = $this->load->view($file, $this->data, TRUE);
+                    $data['yield_'.$name] = $this->load->view('asides/' . $file, $this->data, TRUE);
                 }
             }
 

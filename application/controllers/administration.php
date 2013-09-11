@@ -95,28 +95,6 @@ class Administration extends App_Controller
 			$this->css=array_merge_recursive($this->css,$module->css);
 		}
 	}
-
-	public function log_in()
-	{
-		$this->authenticate=FALSE;
-
-		if($this->input->post())
-		{
-			if($this->user->log_in())
-			{
-				redirect('administration');
-			}
-		}
-	}
-
-	public function log_out()
-	{
-		$this->authenticate=FALSE;
-		
-		$this->user->log_out();
-
-		redirect('administration/log_in');
-	}
 }
 
 /* End of file administration.php */
