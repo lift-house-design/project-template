@@ -1,6 +1,14 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-$config['environment'] = 'local';
+/* Set Environment */
+// detect from host (local.domain.com => local, dev.domain.com => development, other => production)
+if(strpos($_SERVER['HTTP_HOST'],'local.') === 0)
+	$config['environment'] = 'local';
+elseif(strpos($_SERVER['HTTP_HOST'],'dev.') === 0)
+	$config['environment'] = 'development';
+else
+	$config['environment'] = 'production';
+//$config['environment'] = 'local'; //hardcode
 
 $config['error_email'] = 'bain.lifthousedesign@gmail.com';
 
