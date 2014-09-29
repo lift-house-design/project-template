@@ -8,7 +8,7 @@ class Administration extends App_Controller
 
 	protected $authenticate=array('administrator');
 
-	protected $authentication_redirect='administration/log_in';
+	protected $authentication_redirect='authentication/log_in';
 
 	public function __construct()
 	{

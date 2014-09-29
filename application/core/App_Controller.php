@@ -75,9 +75,6 @@ class App_Controller extends CI_Controller
     {
         parent::__construct();
 
-        $db_config=$this->config->item('database');
-        $this->load->database($db_config);
-
         $this->_load_helpers();
         $this->_load_models();
     }
