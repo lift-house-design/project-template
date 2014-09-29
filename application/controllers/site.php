@@ -32,6 +32,11 @@ class Site extends App_Controller
 		else
 			$this->view='site/not_found';
 	}
+
+	public function env()
+	{
+		var_dump(ENVIRONMENT);
+	}
 }
 
 /* End of file site.php */

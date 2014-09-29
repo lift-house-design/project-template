@@ -212,5 +212,5 @@ class Authentication extends App_Controller
 	}
 }
 
-/* End of file administration.php */
-/* Location: ./application/controllers/administration/administration.php */
+/* End of file authentication.php */
+/* Location: ./application/controllers/authentication.php */

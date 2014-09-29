@@ -1,55 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-/* Set Environment */
-// detect from host (local.domain.com => local, dev.domain.com => development, other => production)
-if(strpos($_SERVER['HTTP_HOST'],'local.') === 0)
-	$config['environment'] = 'local';
-elseif(strpos($_SERVER['HTTP_HOST'],'dev.') === 0)
-	$config['environment'] = 'development';
-else
-	$config['environment'] = 'production';
-//$config['environment'] = 'local'; //hardcode
-
 $config['error_email'] = 'bain.lifthousedesign@gmail.com';
-
-/*
-|--------------------------------------------------------------------------
-| Database Configuration
-|--------------------------------------------------------------------------
-|
-| http://ellislab.com/codeigniter/user-guide/database/configuration.html
-|
-|--------------------------------------------------------------------------
-*/
-$config['databases']=array(
-	'default' => array(
-		'hostname' => 'localhost',
-		'dbdriver' => 'mysql',
-		'db_debug' => true,		
-	),
-	'local'=>array(
-		'username'=>'root',
-		'password'=>'root',
-		'database'=>'project_template',
-	),
-	'development'=>array(
-		'username'=>'',
-		'password'=>'',
-		'database'=>'',
-	),
-	'production'=>array(
-		'username'=>'',
-		'password'=>'',
-		'database'=>'',
-		'db_debug' => false,
-	),
-);
-
-// Overwrite default database settings with environment-specific settings
-$config['database'] = array_merge(
-	$config['databases']['default'],
-	$config['databases'][$config['environment']]
-);
 
 /*
 |--------------------------------------------------------------------------
